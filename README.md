@@ -110,22 +110,9 @@ After extensive analysis, six key features were selected for the model:
 5. **airbags**: Number of airbags
 6. **turbo**: Binary indicator for turbocharged engines (0 = No, 1 = Yes)
 
-## Project Structure
-
-```plaintext
-car-price-prediction/
-├── app.py                           # FastAPI implementation for XGBoost
-├── app_gbr.py                       # FastAPI implementation for Gradient Boosting
-├── best_gradient_boosting_model.pkl # Serialized Gradient Boosting model
-├── best_xgboost_model.pkl           # Serialized XGBoost model
-├── best_xgboost_model.json          # XGBoost model in JSON format
-├── requirements.txt                 # Project dependencies
-└── README.md                        # This file
-```
-
 ## Deployment
 
-The API is designed to be deployable on cloud platforms like Render or Heroku. Detailed deployment instructions for Render are available in the project documentation.
+The API is deployed on Render for evaluation by the professor.
 
 ## Future Improvements
 
