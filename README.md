@@ -110,11 +110,9 @@ After extensive analysis, six key features were selected for the model:
 5. **airbags**: Number of airbags
 6. **turbo**: Binary indicator for turbocharged engines (0 = No, 1 = Yes)
 
-
-
 ## Project Structure
 
-```
+```plaintext
 car-price-prediction/
 ├── app.py                           # FastAPI implementation for XGBoost
 ├── app_gbr.py                       # FastAPI implementation for Gradient Boosting
