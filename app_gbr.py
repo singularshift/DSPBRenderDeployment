@@ -25,7 +25,7 @@ class CarFeatures(BaseModel):
 def home():
     return {"message": "Welcome to the Car Price Prediction API! Use /predict to get predictions."}
 
-# ✅ Prediction Endpoint
+# Prediction Endpoint
 @app.post("/predict")
 def predict_price(features: CarFeatures):
     # Convert input to DataFrame
