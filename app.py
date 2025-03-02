@@ -3,19 +3,30 @@ import xgboost as xgb
 import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
+import os
 
 # Function to Load XGBoost Model with Pickle (Ensures XGBRegressor, not Booster)
 def load_xgboost_model():
-    model = joblib.load("best_xgboost_model.pkl")
-
-    # Ensure it's an XGBRegressor, not a Booster
-    if isinstance(model, xgb.Booster):
-        print("⚠️ Warning: Loaded model is a Booster. Converting to XGBRegressor.")
-        xgb_regressor = xgb.XGBRegressor()
-        xgb_regressor.load_model("best_xgboost_model.json")  # Convert Booster to XGBRegressor
-        return xgb_regressor
-    
-    return model
+    try:
+        # First try loading with joblib
+        model = joblib.load("best_xgboost_model.pkl")
+        
+        # If it's a booster, convert it to XGBRegressor
+        if isinstance(model, xgb.Booster):
+            print("Converting Booster to XGBRegressor...")
+            # Save the booster to a temporary file
+            model.save_model("temp_model.json")
+            # Create new XGBRegressor and load the model
+            xgb_regressor = xgb.XGBRegressor()
+            xgb_regressor.load_model("temp_model.json")
+            # Clean up temporary file
+            os.remove("temp_model.json")
+            return xgb_regressor
+        
+        return model
+    except Exception as e:
+        print(f"Error loading model: {str(e)}")
+        raise
 
 # Load the trained XGBoost model
 model = load_xgboost_model()
@@ -31,20 +42,24 @@ def home():
 
 # Define Input Data Model
 class CarFeatures(BaseModel):
-    turbo: int
-    airbags: int
     prod_year: int
-    cylinders: int
     engine_volume: float
     mileage: int
+    cylinders: int
+    airbags: int
+    turbo: int
 
 # Prediction Endpoint
 @app.post("/predict")
-def predict_price(features: CarFeatures):
-    # Convert input to DataFrame
-    input_data = pd.DataFrame([features.dict()])
-
-    # Make prediction
-    predicted_price = model.predict(input_data)[0]
-
+def predict_price(car_features: CarFeatures):
+    input_data = pd.DataFrame([[
+        car_features.prod_year,
+        car_features.engine_volume,
+        car_features.mileage,
+        car_features.cylinders,
+        car_features.airbags,
+        car_features.turbo
+    ]], columns=['prod_year', 'engine_volume', 'mileage', 'cylinders', 'airbags', 'turbo'])
+    
+    predicted_price = float(model.predict(input_data)[0])  # Convert numpy.float32 to Python float
     return {"predicted_price": predicted_price}

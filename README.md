@@ -12,6 +12,7 @@ The project aims to provide accurate price predictions for used cars by analyzin
 - **RESTful API**: Easy-to-use FastAPI endpoints for real-time predictions
 - **Data Preprocessing Pipeline**: Comprehensive cleaning and transformation strategies
 - **Feature Selection**: Focused on 6 high-importance features for efficient predictions
+- **Interactive Web Interface**: User-friendly Streamlit UI for easy predictions
 
 ## Usage
 
@@ -28,6 +29,19 @@ python app.py
 ```
 
 The API will be available at <http://127.0.0.1:8000>
+
+### Running the Streamlit UI
+
+To launch the interactive web interface:
+
+```bash
+# Run the Streamlit app
+streamlit run streamlit_ui.py
+```
+
+The UI will be available at <http://localhost:8501>
+
+Note: Make sure the FastAPI backend server is running before making predictions through the UI!
 
 ### API Endpoints
 
